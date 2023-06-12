@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to ABC store where you can buy everything
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name }}- ABC store
+    {% else %}
+        see our new collection
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row_class">
+                <div class="mx-auto">
+                      <h5><p><a href="{% url 'shopapp:allProdCat' %}">Our Product Pollection</a></p></h5>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+        <div class="mx_auto">
+        {% if category %}
+
+                <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+         </div>
+<br>
+        <div>
+            <h1 class="text-center my_title">{{category.name}}</h1>
+            <p class="text-justify">{{category.description}}</p>
+        </div>
+        {% else %}
+            <div>
+            <img class="my_image my_image_padding" src="{% static 'img/banner.jpg' %}" alt="our products">
+            </div>
+<br>
+             <div>
+                <h1 class="text-center my_title">Our products collections</h1>
+                        <p class="text-justify">Shirts and pants are essential items in any wardrobe, and having a collection of both can provide a range of style options for different occasions. Whether you are looking for casual wear or more formal attire, a well-curated collection of shirts and pants can offer endless possibilities.
+
+When it comes to shirts, there are various styles and materials to choose from. Classic button-down shirts can be dressed up or down depending on the occasion, while T-shirts offer a more casual and comfortable option. Polo shirts provide a middle ground between the two, offering a smart-casual look. Additionally, there are different types of fabrics to consider, such as cotton, linen, and silk, each with its unique look and feel.
+
+Pants, on the other hand, can range from jeans to chinos to dress pants. </p>
+            </div>
+        {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-12 ">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image_product" style="width:200px;height:251px;" src="{{product.image.url}}" alt="{{product.name}}"></a>
+            <div class="card-body">
+                <h4>{{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            <ul class="pagination justify-content-center">
+                <ul class="pagination pagination-sm">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="page-link {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+            </ul>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
